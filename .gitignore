@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Environment variables — contains DB URIs, credentials, org IDs
+.env
+
+# Output folder — contains production data dumps and logs
+output/
+
+# OS garbage
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+
+# Logs (if any end up outside output/)
+*.log

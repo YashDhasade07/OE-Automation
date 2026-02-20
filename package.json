@@ -1,0 +1,19 @@
+{
+  "name": "oe-automation",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "run.js",
+  "scripts": {
+    "task": "node run.js",
+    "task:all": "node run.js --all"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "minimist": "^1.2.8",
+    "mongodb": "^7.1.0",
+    "winston": "^3.19.0"
+  }
+}
