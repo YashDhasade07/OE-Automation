@@ -1,5 +1,5 @@
 // tasks/task_01_providers/index.js
-import { runQuery, connect } from '../../connectors/mongo.js';
+import { runQuery } from '../../connectors/mongo.js';
 import { saveJSON, saveReport } from '../../utils/output.js';
 import logger from '../../logger/index.js';
 import { getConfig } from '../../config/environments.js';
@@ -16,15 +16,14 @@ export async function run() {
   for (const region of REGIONS) {
     try {
       const env = mongo[region];
-      const orgIds = env.orgIds;
+      const orgIds = env.orgIds_task01;   // ← updated key
 
       if (!env.dbName) {
-        logger.error(`[${TASK_NAME}:${region}] No DB name set in .env — skipping region`);
+        logger.error(`[${TASK_NAME}:${region}] No DB name in .env — skipping`);
         continue;
       }
-
       if (!orgIds || orgIds.length === 0) {
-        logger.warn(`[${TASK_NAME}:${region}] No org IDs in .env — skipping region`);
+        logger.warn(`[${TASK_NAME}:${region}] No org IDs in .env — skipping`);
         continue;
       }
 
@@ -33,22 +32,14 @@ export async function run() {
       const rawProviders = await runQuery(buildProvidersQuery(orgIds), region);
       logger.info(`[${TASK_NAME}:${region}] Fetched ${rawProviders.length} provider(s)`);
 
-    //   if (rawProviders.length > 0) {
-    //     logger.info(`[${TASK_NAME}:${region}] Sample doc: ${JSON.stringify(rawProviders[0], null, 2)}`);
-    //   }
-
       const enriched = enrichProviders(rawProviders);
 
       for (const p of enriched) {
         const s = p._staleness;
         if (s.status === 'CRITICAL') {
-          logger.error(
-            `[CRITICAL][${region}] "${p.accountName}" (${p.cloudProvider}) | org: ${p.organizationId} | not processed for ${s.daysSince} days`
-          );
+          logger.error(`[CRITICAL][${region}] "${p.accountName}" (${p.cloudProvider}) | org: ${p.organizationId} | not processed for ${s.daysSince} days`);
         } else if (s.status === 'WARNING') {
-          logger.warn(
-            `[WARNING][${region}] "${p.accountName}" (${p.cloudProvider}) | org: ${p.organizationId} | not processed for ${s.daysSince} days`
-          );
+          logger.warn(`[WARNING][${region}] "${p.accountName}" (${p.cloudProvider}) | org: ${p.organizationId} | not processed for ${s.daysSince} days`);
         }
       }
 
