@@ -23,15 +23,20 @@ export function getConfig() {
       us: { profile: process.env.AWS_PROFILE_US, region: 'us-east-1' },
       ap: { profile: process.env.AWS_PROFILE_AP, region: 'ap-south-1' },
     },
-
-    // ── Task 04 ────────────────────────────────────────
     billing: {
       apiUrl:    process.env.BILLING_API_URL,
       email:     process.env.BILLING_EMAIL,
       password:  process.env.BILLING_PASSWORD,
       accountId: process.env.BILLING_ACCOUNT_ID,
-      // Pipe-separated in .env → array here
       services:  process.env.BILLING_SERVICES?.split('|').map(s => s.trim()) ?? [],
+    },
+
+    // ── Task 05 ────────────────────────────────────────
+    task05: {
+      apiUrl:   process.env.TASK05_API_URL,
+      email:    process.env.TASK05_EMAIL,
+      password: process.env.TASK05_PASSWORD,
+      orgIds:   process.env.ORG_IDS_TASK05?.split(',').map(id => id.trim()) ?? [],
     },
   };
 }

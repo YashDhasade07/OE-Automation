@@ -1,32 +1,33 @@
 // auth/login.js
 import logger from '../logger/index.js';
-import { getConfig } from '../config/environments.js';
 
 /**
- * Logs into the billing platform using credentials from .env.
+ * Logs into the platform with the provided credentials.
  * Returns the ssid cookie value to be sent with all subsequent requests.
- * Reusable across any task that needs API authentication.
+ *
+ * Reusable across any task — just pass the url, email, password.
+ *
+ * @param {{ url: string, email: string, password: string }} credentials
+ * @returns {Promise<string>} ssid cookie value
  */
-export async function login() {
-  const { billing } = getConfig();
-
-  if (!billing.apiUrl || !billing.email || !billing.password) {
-    throw new Error('[auth] BILLING_API_URL, BILLING_EMAIL or BILLING_PASSWORD missing in .env');
+export async function login({ url, email, password }) {
+  if (!url || !email || !password) {
+    throw new Error('[auth] login() requires url, email, and password');
   }
 
-  logger.info(`[auth] Logging in as ${billing.email}...`);
+  logger.info(`[auth] Logging in as ${email}...`);
 
   const payload = {
     operationName: 'Login',
     variables: {},
     query: `mutation Login {
-      login(userCredential: { email: "${billing.email}", password: "${billing.password}" }) {
+      login(userCredential: { email: "${email}", password: "${password}" }) {
         intent
       }
     }`,
   };
 
-  const response = await fetch(billing.apiUrl, {
+  const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -38,23 +39,21 @@ export async function login() {
 
   const body = await response.json();
 
-  // Check for GraphQL-level errors
   if (body.errors?.length > 0) {
     throw new Error(`[auth] Login GraphQL error: ${body.errors[0].message}`);
   }
 
-  // Extract ssid from Set-Cookie header
   const setCookieHeader = response.headers.get('set-cookie');
   if (!setCookieHeader) {
-    throw new Error('[auth] Login succeeded but no Set-Cookie header found in response');
+    throw new Error('[auth] Login succeeded but no Set-Cookie header in response');
   }
 
   const ssidMatch = setCookieHeader.match(/ssid=([^;]+)/);
   if (!ssidMatch) {
-    throw new Error('[auth] Login succeeded but ssid cookie not found in Set-Cookie header');
+    throw new Error('[auth] Login succeeded but ssid cookie not found in Set-Cookie');
   }
 
   const ssid = ssidMatch[1];
-  logger.info('[auth] Login successful ✓ ssid cookie obtained');
+  logger.info(`[auth] Login successful ✓ ssid obtained for ${email}`);
   return ssid;
 }
