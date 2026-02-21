@@ -30,13 +30,33 @@ export function getConfig() {
       accountId: process.env.BILLING_ACCOUNT_ID,
       services:  process.env.BILLING_SERVICES?.split('|').map(s => s.trim()) ?? [],
     },
-
-    // ── Task 05 ────────────────────────────────────────
     task05: {
       apiUrl:   process.env.TASK05_API_URL,
       email:    process.env.TASK05_EMAIL,
       password: process.env.TASK05_PASSWORD,
       orgIds:   process.env.ORG_IDS_TASK05?.split(',').map(id => id.trim()) ?? [],
+    },
+    clickhouse: {
+      us: {
+        host:     process.env.CLICKHOUSE_HOST_US,
+        username: process.env.CLICKHOUSE_USER_US,
+        password: process.env.CLICKHOUSE_PASSWORD_US,
+        database: process.env.CLICKHOUSE_DB_US ?? 'default',
+      },
+      ap: {
+        host:     process.env.CLICKHOUSE_HOST_AP,
+        username: process.env.CLICKHOUSE_USER_AP,
+        password: process.env.CLICKHOUSE_PASSWORD_AP,
+        database: process.env.CLICKHOUSE_DB_AP ?? 'default',
+      },
+    },
+
+    // ── Task 06 ────────────────────────────────────────
+    task06: {
+      orgIds: {
+        us: process.env.ORG_IDS_TASK06_US?.split(',').map(id => id.trim()) ?? [],
+        ap: process.env.ORG_IDS_TASK06_AP?.split(',').map(id => id.trim()) ?? [],
+      },
     },
   };
 }

@@ -11,6 +11,7 @@
     "task:all": "node run.js --all"
   },
   "dependencies": {
+    "@clickhouse/client": "^1.17.0",
     "dotenv": "^17.3.1",
     "minimist": "^1.2.8",
     "mongodb": "^7.1.0",

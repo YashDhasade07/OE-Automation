@@ -1,6 +1,6 @@
 // tasks/task_02_providers_sync/report.js
 
-const WARNING_DAYS  = 2;
+const WARNING_DAYS  = 1.5;
 const CRITICAL_DAYS = 3;
 
 export function checkStaleness(lastProcessedTime) {

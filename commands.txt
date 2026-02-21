@@ -3,4 +3,6 @@
 3- npm run task -- --task task_03_user_tracking
 4- npm run task -- --task task_04_billing
 5- npm run task -- --task task_05_org_summary
+6- npm run task -- --task task_06_anomaly_health
+
 

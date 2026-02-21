@@ -1,8 +1,9 @@
 // run.js
-import 'dotenv/config';   // ← must be first import
+import 'dotenv/config';
 import minimist from 'minimist';
 import registry from './tasks/registry.js';
-import { disconnectAll } from './connectors/mongo.js';
+import { disconnectAll as mongoDisconnect } from './connectors/mongo.js';
+import { disconnectAll as clickhouseDisconnect } from './connectors/clickhouse.js';
 import logger from './logger/index.js';
 
 const args = minimist(process.argv.slice(2));
@@ -35,7 +36,8 @@ async function main() {
     logger.error(`Fatal: ${err.message}`);
     process.exit(1);
   } finally {
-    await disconnectAll();
+    await mongoDisconnect();
+    await clickhouseDisconnect();
   }
 }
 
