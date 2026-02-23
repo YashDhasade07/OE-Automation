@@ -30,11 +30,20 @@ export function getConfig() {
       accountId: process.env.BILLING_ACCOUNT_ID,
       services:  process.env.BILLING_SERVICES?.split('|').map(s => s.trim()) ?? [],
     },
+
     task05: {
-      apiUrl:   process.env.TASK05_API_URL,
-      email:    process.env.TASK05_EMAIL,
-      password: process.env.TASK05_PASSWORD,
-      orgIds:   process.env.ORG_IDS_TASK05?.split(',').map(id => id.trim()) ?? [],
+      us: {
+        apiUrl:   process.env.TASK05_API_URL_US,
+        email:    process.env.TASK05_EMAIL_US,
+        password: process.env.TASK05_PASSWORD_US,
+        orgIds:   process.env.ORG_IDS_TASK05_US?.split(',').map(id => id.trim()) ?? [],
+      },
+      ap: {
+        apiUrl:   process.env.TASK05_API_URL_AP,
+        email:    process.env.TASK05_EMAIL_AP,
+        password: process.env.TASK05_PASSWORD_AP,
+        orgIds:   process.env.ORG_IDS_TASK05_AP?.split(',').map(id => id.trim()) ?? [],
+      },
     },
     clickhouse: {
       us: {
@@ -50,12 +59,18 @@ export function getConfig() {
         database: process.env.CLICKHOUSE_DB_AP ?? 'default',
       },
     },
-
-    // ── Task 06 ────────────────────────────────────────
     task06: {
       orgIds: {
         us: process.env.ORG_IDS_TASK06_US?.split(',').map(id => id.trim()) ?? [],
         ap: process.env.ORG_IDS_TASK06_AP?.split(',').map(id => id.trim()) ?? [],
+      },
+    },
+
+    // ── Customer Happiness ──────────────────────────────
+    customerHappiness: {
+      orgIds: {
+        us: process.env.ORG_IDS_CUSTOMER_HAPPINESS_US?.split(',').map(id => id.trim()) ?? [],
+        ap: process.env.ORG_IDS_CUSTOMER_HAPPINESS_AP?.split(',').map(id => id.trim()) ?? [],
       },
     },
   };

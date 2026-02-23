@@ -50,7 +50,7 @@ export async function disconnectAll() {
 export async function runQuery(sql, params = {}, region = 'us') {
   const client = await connect(region);
 
-  logger.info(`[clickhouse:${region}] Query: ${sql}`);
+//   logger.info(`[clickhouse:${region}] Query: ${sql}`);
 
   const result = await client.query({
     query:            sql,
